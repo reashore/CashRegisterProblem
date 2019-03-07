@@ -1,12 +1,13 @@
-﻿using System;
+﻿using static System.Console;
 
 namespace GlobalRelay.Problem
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            WriteLine("Hello World!");
+            ReadKey();
         }
     }
 }
