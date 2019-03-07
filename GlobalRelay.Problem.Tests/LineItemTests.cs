@@ -1,6 +1,6 @@
 using NUnit.Framework;
 
-namespace Tests
+namespace GlobalRelay.Problem.Tests
 {
     public class Tests
     {
