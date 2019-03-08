@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using GlobalRely.Problem.Domain;
 
 namespace GlobalRelay.Problem.Domain
 {
@@ -9,17 +8,13 @@ namespace GlobalRelay.Problem.Domain
         void Add(IEnumerable<LineItem> lineItems);
         decimal GetPrice();
         string ToString();
+        int Count { get; }
     }
 
     public class ShoppingCart : IShoppingCart
     {
         private readonly List<ILineItem> _lineItemList = new List<ILineItem>();
         
-        public ShoppingCart()
-        {
-            
-        }
-
         public void Add(ILineItem lineItem)
         {
             _lineItemList.Add(lineItem);
@@ -50,7 +45,6 @@ namespace GlobalRelay.Problem.Domain
             return "List of cart items with prices and total cost of cart";
         }
 
-        // todo more work here?
         public int Count => _lineItemList.Count;
     }
 
@@ -60,6 +54,7 @@ namespace GlobalRelay.Problem.Domain
         public abstract void Add(IEnumerable<LineItem> lineItems);
         public abstract decimal GetPrice();
         public abstract override string ToString();
+        public abstract int Count { get; }
     }
 
     public class ShoppingCartWithCouponDiscount : ShoppingCartDecorator
@@ -97,5 +92,7 @@ namespace GlobalRelay.Problem.Domain
         {
             return "List of cart items with prices and total cost of cart";
         } 
+        
+        public override int Count => _shoppingCart.Count;
     }
 }

@@ -1,9 +1,9 @@
 ﻿using GlobalRelay.Problem.Domain;
-using GlobalRely.Problem.Domain;
 using static System.Console;
 
 namespace GlobalRelay.Problem
 {
+    // ReSharper disable once ClassNeverInstantiated.Global
     public class Program
     {
         public static void Main(string[] args)
@@ -18,33 +18,21 @@ namespace GlobalRelay.Problem
     {
         public static void TestLineItems()
         {
-            ILineItem fixedPriceLineItem = new FixedPriceLineItem
-            {
-                Id = 1,
-                Description = "Item 1",
-                Quantity = 3,
-                UnitPrice = 100.0m
-            };
+            ILineItem fixedPriceLineItem = new FixedPriceLineItem(1, 3);
 
-            ILineItem byWeightLineItem = new ByWeightLineItem
-            {
-                Id = 2,
-                Description = "Item 2",
-                PricePerPound = 100.0m,
-                WeightInPounds = 5
-            };
+            ILineItem byWeightLineItem = new ByWeightLineItem(2, 5);
             
             //----------------------------------------------------------------
 
             ILineItem bulkDiscountLineItem = new BulkDiscountLineItem(fixedPriceLineItem)
             {
-                NumberPurchased = 3,
-                NumberForFree = 1
+                DiscountThreshold = 10.00m,
+                DiscountPercentage = 20
             };
 
             ILineItem couponDiscountPriceLineItem = new CouponDiscountLineItem(byWeightLineItem)
             {
-                CouponDiscount = 20.0m
+                CouponDiscount = 10.0m
             };
 
             ILineItem couponAndBulkDiscountDiscountPriceLineItem = new CouponDiscountLineItem(bulkDiscountLineItem)
@@ -74,7 +62,7 @@ namespace GlobalRelay.Problem
 
         public static void TestShoppingCart()
         {
-            IShoppingCart shoppingCart = new ShoppingCart();
+            //IShoppingCart shoppingCart = new ShoppingCart();
             
             // add items
             

@@ -1,4 +1,4 @@
-﻿namespace GlobalRely.Problem.Domain
+﻿namespace GlobalRelay.Problem.Domain
 {
     public interface ILineItem
     {
@@ -25,27 +25,62 @@
 
     public class FixedPriceLineItem : ILineItem
     {
+        public FixedPriceLineItem(int id, int quantity = 1)
+        {
+            Id = id;
+            Quantity = quantity;
+
+            FixedPriceLineItemData fixedPriceLineItemData = LookupLineItemData(id);
+            Description = fixedPriceLineItemData.Description;
+            UnitPrice = fixedPriceLineItemData.Price;
+        }
+        
         public int Id { get; set; }
         public string Description { get; set; }
-        public int Quantity { private get; set; }
-        public decimal UnitPrice { private get; set; }
+        private int Quantity { get; }
+        private decimal UnitPrice { get; }
         
         public decimal GetPrice()
         {
             return Quantity * UnitPrice;
         }
+
+        // todo return multiple values to eliminate type
+        private static FixedPriceLineItemData LookupLineItemData(int id)
+        {
+            ILookupLineItemData<FixedPriceLineItemData> fixedPriceLineItemLookup = new FixedPriceLineItemLookup();
+            FixedPriceLineItemData fixedPriceLineItemData = fixedPriceLineItemLookup.LookupLineItemData(id);
+            return fixedPriceLineItemData;
+        }
     }
 
     public class ByWeightLineItem : ILineItem
     {
+        public ByWeightLineItem(int id, double weightInKilos)
+        {
+            Id = id;
+            WeightInKilos = weightInKilos;
+            
+            ByWeightLineItemData byWeightLineItemData = LookupLineItemData(id);
+            Description = byWeightLineItemData.Description;
+            PricePerKilo = byWeightLineItemData.PricePerKilo;
+        }
+        
         public int Id { get; set; }
         public string Description { get; set; }
-        public double WeightInPounds { private get; set; }
-        public decimal PricePerPound { private get; set; }
+        private double WeightInKilos { get; }
+        private decimal PricePerKilo { get; }
 
         public decimal GetPrice()
         {
-            return (decimal) WeightInPounds * PricePerPound;
+            return (decimal) WeightInKilos * PricePerKilo;
+        }
+        
+        private static ByWeightLineItemData LookupLineItemData(int id)
+        {
+            ILookupLineItemData<ByWeightLineItemData> byWeightLineItemLookup = new ByWeightLineItemLookup();
+            ByWeightLineItemData byWeightLineItemData = byWeightLineItemLookup.LookupLineItemData(id);
+            return byWeightLineItemData;
         }
     }
     
@@ -60,13 +95,19 @@
             _lineItem = lineItem;
         }
         
-        public int NumberPurchased { private get; set; }
-        public int NumberForFree { private get; set; }
+        public decimal DiscountThreshold { private get; set; }
+        public double DiscountPercentage { private get; set; }
         
         public override decimal GetPrice()
         {
-            decimal basePrice = _lineItem.GetPrice();
-            return (NumberPurchased - NumberForFree) * basePrice;
+            decimal price = _lineItem.GetPrice();
+
+            if (price >= DiscountThreshold)
+            {
+                price = price * (1 - (decimal) DiscountPercentage / 100);
+            }
+            
+            return price;
         }
     }
 
@@ -79,12 +120,18 @@
             _lineItem = lineItem;
         }
         
-        public decimal CouponDiscount{ private get; set; }
+        public decimal CouponDiscount { private get; set; }
         
         public override decimal GetPrice()
         {
-            decimal basePrice = _lineItem.GetPrice();
-            return basePrice - CouponDiscount;
+            decimal price = _lineItem.GetPrice();
+
+            if (price >= CouponDiscount)
+            {
+                price = price - CouponDiscount;
+            }
+            
+            return price;
         }
     }
 }
