@@ -10,6 +10,8 @@ namespace GlobalRelay.Problem.Domain
         string ToString();
         int Count { get; }
     }
+    
+    //--------------------------------------------------------------------------------------
 
     public class ShoppingCart : IShoppingCart
     {
@@ -47,6 +49,8 @@ namespace GlobalRelay.Problem.Domain
 
         public int Count => _lineItemList.Count;
     }
+    
+    //--------------------------------------------------------------------------------------
 
     public abstract class ShoppingCartDecorator : IShoppingCart
     {
@@ -56,6 +60,8 @@ namespace GlobalRelay.Problem.Domain
         public abstract override string ToString();
         public abstract int Count { get; }
     }
+    
+    //--------------------------------------------------------------------------------------
 
     public class ShoppingCartWithCouponDiscount : ShoppingCartDecorator
     {

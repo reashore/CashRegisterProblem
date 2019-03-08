@@ -25,6 +25,8 @@ namespace GlobalRelay.Problem.Tests
             Assert.That(actualCount, Is.EqualTo(expectedCount));
         }
         
+        //--------------------------------------------------------------------------------------
+        
         [Test]
         public void AddFixedPriceLineItemToShoppingCartTest()
         {
@@ -34,7 +36,7 @@ namespace GlobalRelay.Problem.Tests
             const int quantity = 3;
             ILineItem fixedPriceLineItem = new FixedPriceLineItem(id, quantity);
             const int expectedCount = 1;
-            const decimal expectedPrice = 300.00m;
+            const decimal expectedPrice = 30.00m;
             
             // Act
             shoppingCart.Add(fixedPriceLineItem);
@@ -53,7 +55,7 @@ namespace GlobalRelay.Problem.Tests
             IShoppingCart shoppingCart = new ShoppingCart();
             ILineItem byWeightLineItem = new ByWeightLineItem(1, 5);
             const int expectedCount = 1;
-            const decimal expectedPrice = 1000.00m;
+            const decimal expectedPrice = 25.00m;
             
             // Act
             shoppingCart.Add(byWeightLineItem);
@@ -65,8 +67,7 @@ namespace GlobalRelay.Problem.Tests
             Assert.That(actualPrice, Is.EqualTo(expectedPrice));
         }
         
-        // Add item with bulk discount
-        // Add item with coupon discount
+        //--------------------------------------------------------------------------------------
 
     }
 }
