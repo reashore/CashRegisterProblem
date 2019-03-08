@@ -1,4 +1,6 @@
-﻿namespace GlobalRelay.Problem.Domain
+﻿using System;
+
+namespace GlobalRelay.Problem.Domain
 {
     public interface ILineItem
     {
@@ -45,7 +47,7 @@
             return Quantity * UnitPrice;
         }
 
-        // todo return multiple values to eliminate type
+        // todo return multiple values to eliminate extra type
         private static FixedPriceLineItemData LookupLineItemData(int id)
         {
             ILookupLineItemData<FixedPriceLineItemData> fixedPriceLineItemLookup = new FixedPriceLineItemLookup();
@@ -89,14 +91,45 @@
     public class BulkDiscountLineItem : LineItemDecorator
     {
         private readonly ILineItem _lineItem;
+        private decimal _discountThreshold;
+        private double _discountPercentage;
 
         public BulkDiscountLineItem(ILineItem lineItem)
         {
-            _lineItem = lineItem;
+            _lineItem = lineItem ?? throw new ArgumentNullException(nameof(lineItem));
         }
-        
-        public decimal DiscountThreshold { private get; set; }
-        public double DiscountPercentage { private get; set; }
+
+        public decimal DiscountThreshold
+        {
+            private get { return _discountThreshold; }
+
+            set
+            {
+                if (value <= 0m)
+                {
+                    const string message = "DiscountThreshold cannot be <= 0";
+                    throw new Exception(message);
+                }
+
+                _discountThreshold = value;
+            }
+        }
+
+        public double DiscountPercentage
+        {
+            private get { return _discountPercentage; }
+            
+            set
+            {
+                if (value <= 0)
+                {
+                    const string message = "DiscountPercentage cannot be <= 0";
+                    throw new Exception(message);
+                }
+
+                _discountPercentage = value;
+            }
+        }
         
         public override decimal GetPrice()
         {
@@ -114,13 +147,28 @@
     public class CouponDiscountLineItem : LineItemDecorator
     {
         private readonly ILineItem _lineItem;
+        private decimal _couponDiscount;
 
         public CouponDiscountLineItem(ILineItem lineItem)
         {
-            _lineItem = lineItem;
+            _lineItem = lineItem ?? throw new ArgumentNullException(nameof(lineItem));
         }
-        
-        public decimal CouponDiscount { private get; set; }
+
+        public decimal CouponDiscount
+        {
+            private get { return _couponDiscount;}
+
+            set
+            {
+                if (value <= 0)
+                {
+                    const string message = "CouponDiscount cannot be <= 0";
+                    throw new Exception(message);
+                }
+
+                _couponDiscount = value;
+            }
+        }
         
         public override decimal GetPrice()
         {

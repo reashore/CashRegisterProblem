@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace GlobalRelay.Problem.Domain
@@ -19,11 +20,21 @@ namespace GlobalRelay.Problem.Domain
         
         public void Add(ILineItem lineItem)
         {
+            if (lineItem == null)
+            {
+                throw new ArgumentNullException(nameof(lineItem));
+            }
+            
             _lineItemList.Add(lineItem);
         }
         
         public void Add(IEnumerable<LineItem> lineItems)
         {
+            if (lineItems == null)
+            {
+                throw new ArgumentNullException(nameof(lineItems));
+            }
+            
             foreach (LineItem lineItem in lineItems)
             {
                 Add(lineItem);
@@ -69,26 +80,36 @@ namespace GlobalRelay.Problem.Domain
 
         public ShoppingCartWithCouponDiscount(IShoppingCart shoppingCart)
         {
-            _shoppingCart = shoppingCart;
+            _shoppingCart = shoppingCart ?? throw new ArgumentNullException(nameof(shoppingCart));
         }
         
         public double CouponDiscount { get; set; }
         
         public override void Add(ILineItem lineItem)
         {
+            if (lineItem == null)
+            {
+                throw new ArgumentNullException(nameof(lineItem));
+            }
+
             _shoppingCart.Add(lineItem);
         }
         
         public override void Add(IEnumerable<LineItem> lineItems)
         {
+            if (lineItems == null)
+            {
+                throw new ArgumentNullException(nameof(lineItems));
+            }
+
             _shoppingCart.Add(lineItems);
         }
 
         public override decimal GetPrice()
         {
             decimal totalPrice = _shoppingCart.GetPrice();
-            
-            // Apply discount
+
+            // todo fix
             totalPrice *= (decimal) CouponDiscount;
 
             return totalPrice;

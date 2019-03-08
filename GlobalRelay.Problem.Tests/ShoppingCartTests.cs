@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using GlobalRelay.Problem.Domain;
 
@@ -68,7 +70,82 @@ namespace GlobalRelay.Problem.Tests
         }
         
         //--------------------------------------------------------------------------------------
+        
+        [Test]
+        public void AddingNullLineItemToShoppingCartThrowsExceptionTest()
+        {
+            // Arrange
+            IShoppingCart shoppingCart = new ShoppingCart();
+            
+            // Assert
+            Assert.Throws<ArgumentNullException>(() =>
+                {
+                    shoppingCart.Add((ILineItem)null);
+                }
+            );
+        }
+        
+        [Test]
+        public void AddingNullCollectionOfLineItemsToShoppingCartThrowsExceptionTest()
+        {
+            // Arrange
+            IShoppingCart shoppingCart = new ShoppingCart();
+            
+            // Assert
+            Assert.Throws<ArgumentNullException>(() =>
+                {
+                    shoppingCart.Add((IEnumerable<LineItem>)null);
+                }
+            );
+        }
+        
+        [Test]
+        public void ShoppingCartWithCouponDiscountWithNullArgumentThrowsExceptionTest()
+        {
+            // Assert
+            Assert.Throws<ArgumentNullException>(() =>
+                {
+                    ShoppingCartWithCouponDiscount shoppingCartWithCouponDiscount = new ShoppingCartWithCouponDiscount(null)
+                    {
+                        CouponDiscount = 10.00
+                    };
+                }
+            );
+        }
+        
+        [Test]
+        public void AddingNullLineItemToShoppingCartWithCouponDiscountThrowsExceptionTest()
+        {
+            // Arrange
+            IShoppingCart shoppingCart = new ShoppingCart();
+            IShoppingCart shoppingCartWithCouponDiscount = new ShoppingCartWithCouponDiscount(shoppingCart);
+            
+            // Assert
+            Assert.Throws<ArgumentNullException>(() =>
+                {
+                    shoppingCartWithCouponDiscount.Add((ILineItem)null);
+                }
+            );
+        }
+        
+        [Test]
+        public void AddingNullCollectionOfLineItemsToShoppingCartWithCouponDiscountThrowsExceptionTest()
+        {
+            // Arrange
+            IShoppingCart shoppingCart = new ShoppingCart();
+            IShoppingCart shoppingCartWithCouponDiscount = new ShoppingCartWithCouponDiscount(shoppingCart);
+            
+            // Assert
+            Assert.Throws<ArgumentNullException>(() =>
+                {
+                    shoppingCartWithCouponDiscount.Add((IEnumerable<LineItem>)null);
+                }
+            );
+        }
+        
+        //--------------------------------------------------------------------------------------
 
+        
     }
 }
 

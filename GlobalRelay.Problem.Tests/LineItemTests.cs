@@ -1,3 +1,4 @@
+using System;
 using GlobalRelay.Problem.Domain;
 using NUnit.Framework;
 
@@ -13,12 +14,12 @@ namespace GlobalRelay.Problem.Tests
             const int id = 1;
             const string expectedDescription = "Fixed-price lineitem 1";
             const decimal expectedPrice = 10.00m;
-            
+
             // Act
             FixedPriceLineItemData fixedPriceLineItemData = fixedPriceLineItemLookup.LookupLineItemData(id);
             string actualDescription = fixedPriceLineItemData.Description;
             decimal actualPrice = fixedPriceLineItemData.Price;
-            
+
             // Assert
             Assert.Multiple(() =>
             {
@@ -35,12 +36,12 @@ namespace GlobalRelay.Problem.Tests
             const int id = 1;
             const string expectedDescription = "By-weight lineitem 1";
             const decimal expectedPricePerKilo = 5.00m;
-            
+
             // Act
             ByWeightLineItemData byWeightLineItemData = byWeightLineItemLookup.LookupLineItemData(id);
             string actualDescription = byWeightLineItemData.Description;
             decimal actualPricePerKilo = byWeightLineItemData.PricePerKilo;
-            
+
             // Assert
             Assert.Multiple(() =>
             {
@@ -48,9 +49,9 @@ namespace GlobalRelay.Problem.Tests
                 Assert.That(actualPricePerKilo, Is.EqualTo(expectedPricePerKilo));
             });
         }
-        
+
         //--------------------------------------------------------------------------------------
-        
+
         [Test]
         public void FixedPriceLineItemHasCorrectPriceTest()
         {
@@ -59,14 +60,14 @@ namespace GlobalRelay.Problem.Tests
             const int quantity = 3;
             ILineItem fixedPriceLineItem = new FixedPriceLineItem(id, quantity);
             const decimal expectedPrice = 30m;
-            
+
             // Act
             decimal actualPrice = fixedPriceLineItem.GetPrice();
-            
+
             // Assert
             Assert.That(actualPrice, Is.EqualTo(expectedPrice));
         }
-        
+
         [Test]
         public void ByWeightLineItemHasCorrectPriceTest()
         {
@@ -75,16 +76,105 @@ namespace GlobalRelay.Problem.Tests
             const double weightInKilos = 5.0;
             ILineItem byWeightLineItem = new ByWeightLineItem(id, weightInKilos);
             const decimal expectedPrice = 25.00m;
-            
+
             // Act
             decimal actualPrice = byWeightLineItem.GetPrice();
-            
+
             // Assert
             Assert.That(actualPrice, Is.EqualTo(expectedPrice));
         }
-        
+
         //--------------------------------------------------------------------------------------
+
+        [Test]
+        public void BulkDiscountWithNullArgumentThrowsExceptionTest()
+        {
+            // Assert
+            Assert.Throws<ArgumentNullException>(() =>
+                {
+                    // ReSharper disable once UnusedVariable
+                    BulkDiscountLineItem bulkDiscountLineItem = new BulkDiscountLineItem(null)
+                    {
+                        DiscountThreshold = 20.00m,
+                        DiscountPercentage = 10
+                    };
+                }
+            );
+        }
         
+        [Test]
+        public void BulkDiscountWithNonPositiveDiscountThresholdThrowsExceptionTest()
+        {
+            // Arrange
+            ILineItem lineItem = new FixedPriceLineItem(1);
+            
+            // Assert
+            Assert.Throws<Exception>(() =>
+                {
+                    // ReSharper disable once UnusedVariable
+                    BulkDiscountLineItem bulkDiscountLineItem = new BulkDiscountLineItem(lineItem)
+                    {
+                        DiscountThreshold = -20.00m,
+                        DiscountPercentage = 10
+                    };
+                }
+            );
+        }
+        
+        [Test]
+        public void BulkDiscountWithNonPositiveDiscountPerecntageThrowsExceptionTest()
+        {
+            // Arrange
+            ILineItem lineItem = new FixedPriceLineItem(1);
+            
+            // Assert
+            Assert.Throws<Exception>(() =>
+                {
+                    // ReSharper disable once UnusedVariable
+                    BulkDiscountLineItem bulkDiscountLineItem = new BulkDiscountLineItem(lineItem)
+                    {
+                        DiscountThreshold = 20.00m,
+                        DiscountPercentage = -10
+                    };
+                }
+            );
+        }
+
+        [Test]
+        public void CouponDiscountWithNullArgumentThrowsExceptionTest()
+        {
+            // Assert
+            Assert.Throws<ArgumentNullException>(() =>
+                {
+                    // ReSharper disable once UnusedVariable
+                    CouponDiscountLineItem couponDiscountLineItem = new CouponDiscountLineItem(null)
+                    {
+                        CouponDiscount = 10.00m,
+                    };
+                }
+            );
+        }
+        
+        [Test]
+        public void CouponDiscountWithNonPositiveDiscountPerecntageThrowsExceptionTest()
+        {
+            // Arrange
+            ILineItem lineItem = new FixedPriceLineItem(1);
+            
+            // Assert
+            Assert.Throws<Exception>(() =>
+                {
+                    // ReSharper disable once UnusedVariable
+                    CouponDiscountLineItem bulkDiscountLineItem = new CouponDiscountLineItem(lineItem)
+                    {
+                        CouponDiscount = -10m
+                    };
+                }
+            );
+        }
+
+        //--------------------------------------------------------------------------------------
+
         [Test]
         public void FixedPriceLineItemWithBulkDiscountHasCorrectPriceTest()
         {
@@ -102,18 +192,18 @@ namespace GlobalRelay.Problem.Tests
                 DiscountThreshold = 20.00m,
                 DiscountPercentage = 10
             };
-            
+
             // Lineitem is below bulk discount threshold of $40.00, therefore has no discount
             BulkDiscountLineItem bulkDiscountLineItem2 = new BulkDiscountLineItem(fixedPriceLineItem)
             {
                 DiscountThreshold = 40.00m,
                 DiscountPercentage = 10
             };
-            
+
             // Act
             decimal actualPrice1 = bulkDiscountLineItem1.GetPrice();
             decimal actualPrice2 = bulkDiscountLineItem2.GetPrice();
-            
+
             // Assert
             Assert.Multiple(() =>
             {
@@ -121,7 +211,7 @@ namespace GlobalRelay.Problem.Tests
                 Assert.That(actualPrice2, Is.EqualTo(expectedPrice2));
             });
         }
-        
+
         [Test]
         public void ByWeightLineItemWithBulkDiscountHasCorrectPriceTest()
         {
@@ -139,18 +229,18 @@ namespace GlobalRelay.Problem.Tests
                 DiscountThreshold = 10.00m,
                 DiscountPercentage = 10
             };
-            
+
             // Lineitem is below bulk discount threshold of $40.00, therefore has no discount
             BulkDiscountLineItem bulkDiscountLineItem2 = new BulkDiscountLineItem(byWeightLineItem)
             {
                 DiscountThreshold = 20.00m,
                 DiscountPercentage = 10
             };
-            
+
             // Act
             decimal actualPrice1 = bulkDiscountLineItem1.GetPrice();
             decimal actualPrice2 = bulkDiscountLineItem2.GetPrice();
-            
+
             // Assert
             Assert.Multiple(() =>
             {
@@ -158,15 +248,15 @@ namespace GlobalRelay.Problem.Tests
                 Assert.That(actualPrice2, Is.EqualTo(expectedPrice2));
             });
         }
-        
+
         //--------------------------------------------------------------------------------------
-         
+
         [Test]
         public void FixedPriceLineItemWithCouponDiscountHasCorrectPriceTest()
         {
             // Arrange
             // unitPrice = 10.00m
-            ILineItem fixedPriceLineItem1 = new FixedPriceLineItem(1);    // quantity defaults to 1
+            ILineItem fixedPriceLineItem1 = new FixedPriceLineItem(1); // quantity defaults to 1
             ILineItem fixedPriceLineItem2 = new FixedPriceLineItem(1, 4);
             const decimal expectedPrice1 = 10.00m;
             const decimal expectedPrice2 = 25.00m;
@@ -176,17 +266,17 @@ namespace GlobalRelay.Problem.Tests
             {
                 CouponDiscount = 15.00m
             };
-            
+
             // Qualifies for discount since price > discount
             CouponDiscountLineItem couponDiscountLineItem2 = new CouponDiscountLineItem(fixedPriceLineItem2)
             {
                 CouponDiscount = 15.00m
             };
-            
+
             // Act
             decimal actualPrice1 = couponDiscountLineItem1.GetPrice();
             decimal actualPrice2 = couponDiscountLineItem2.GetPrice();
-            
+
             // Assert
             Assert.Multiple(() =>
             {
@@ -194,7 +284,7 @@ namespace GlobalRelay.Problem.Tests
                 Assert.That(actualPrice2, Is.EqualTo(expectedPrice2));
             });
         }
-        
+
         [Test]
         public void ByWeightLineItemWithCouponDiscountHasCorrectPriceTest()
         {
@@ -210,17 +300,17 @@ namespace GlobalRelay.Problem.Tests
             {
                 CouponDiscount = 15.00m
             };
-            
+
             // Qualifies for discount since price > discount
             CouponDiscountLineItem couponDiscountLineItem2 = new CouponDiscountLineItem(byWeightLineItem2)
             {
                 CouponDiscount = 15.00m
             };
-            
+
             // Act
             decimal actualPrice1 = couponDiscountLineItem1.GetPrice();
             decimal actualPrice2 = couponDiscountLineItem2.GetPrice();
-            
+
             // Assert
             Assert.Multiple(() =>
             {
@@ -228,9 +318,9 @@ namespace GlobalRelay.Problem.Tests
                 Assert.That(actualPrice2, Is.EqualTo(expectedPrice2));
             });
         }
-        
+
         //--------------------------------------------------------------------------------------
-         
+
         [Test]
         public void DoubleDiscountedLineItemHasCorrectPriceTest()
         {
@@ -244,15 +334,15 @@ namespace GlobalRelay.Problem.Tests
                 DiscountThreshold = 20.00m,
                 DiscountPercentage = 10
             };
-            
+
             CouponDiscountLineItem couponDiscountLineItem = new CouponDiscountLineItem(bulkDiscountLineItem)
             {
                 CouponDiscount = 5.00m
             };
-            
+
             // Act
             decimal actualPrice = couponDiscountLineItem.GetPrice();
-            
+
             // Assert
             Assert.That(actualPrice, Is.EqualTo(expectedPrice));
         }
