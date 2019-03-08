@@ -149,7 +149,7 @@ namespace GlobalRelay.Problem.Tests
                     // ReSharper disable once UnusedVariable
                     CouponDiscountLineItem couponDiscountLineItem = new CouponDiscountLineItem(null)
                     {
-                        CouponDiscount = 10.00m,
+                        CouponDiscount = 10.00m
                     };
                 }
             );

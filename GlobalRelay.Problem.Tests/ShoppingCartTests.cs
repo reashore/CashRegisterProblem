@@ -28,9 +28,9 @@ namespace GlobalRelay.Problem.Tests
         }
         
         //--------------------------------------------------------------------------------------
-        
+
         [Test]
-        public void AddFixedPriceLineItemToShoppingCartTest()
+        public void ShoppingCartWithFixedPriceLineItemHasCorrectPriceTest()
         {
             // Arrange
             IShoppingCart shoppingCart = new ShoppingCart();
@@ -51,7 +51,7 @@ namespace GlobalRelay.Problem.Tests
         }
         
         [Test]
-        public void AddByWeightLineItemToShoppingCartTest()
+        public void ShoppingCartWithByWeightLineItemHasCorrectPriceTest()
         {
             // Arrange
             IShoppingCart shoppingCart = new ShoppingCart();
@@ -69,6 +69,81 @@ namespace GlobalRelay.Problem.Tests
             Assert.That(actualPrice, Is.EqualTo(expectedPrice));
         }
         
+        //--------------------------------------------------------------------------------------
+        
+        [Test]
+        public void ShoppingCartWithMultipleFixedPriceLineItemsHasCorrectPriceTest()
+        {
+            // Arrange
+            IShoppingCart shoppingCart = new ShoppingCart();
+            IEnumerable<ILineItem> lineItems = new List<ILineItem>
+            {
+                new FixedPriceLineItem(1),
+                new FixedPriceLineItem(2),
+                new FixedPriceLineItem(3)
+            };
+            const int expectedCount = 3;
+            const decimal expectedPrice = 60.00m;
+            
+            // Act
+            shoppingCart.Add(lineItems);
+            int actualCount = shoppingCart.Count;
+            decimal actualPrice = shoppingCart.GetPrice();
+            
+            // Assert
+            Assert.That(actualCount, Is.EqualTo(expectedCount));
+            Assert.That(actualPrice, Is.EqualTo(expectedPrice));
+        }
+        
+        [Test]
+        public void ShoppingCartWithMultipleByWeightLineItemsHasCorrectPriceTest()
+        {
+            // Arrange
+            IShoppingCart shoppingCart = new ShoppingCart();
+            IEnumerable<ILineItem> lineItems = new List<ILineItem>
+            {
+                new ByWeightLineItem(1, 1),
+                new ByWeightLineItem(2, 1),
+                new ByWeightLineItem(3, 1)
+            };
+            const int expectedCount = 3;
+            const decimal expectedPrice = 30.00m;
+            
+            // Act
+            shoppingCart.Add(lineItems);
+            int actualCount = shoppingCart.Count;
+            decimal actualPrice = shoppingCart.GetPrice();
+            
+            // Assert
+            Assert.That(actualCount, Is.EqualTo(expectedCount));
+            Assert.That(actualPrice, Is.EqualTo(expectedPrice));
+        }
+        
+        [Test]
+        public void ShoppingCartWithMultipleMixedLineItemsHasCorrectPriceTest()
+        {
+            // Arrange
+            IShoppingCart shoppingCart = new ShoppingCart();
+            IEnumerable<ILineItem> lineItems = new List<ILineItem>
+            {
+                new FixedPriceLineItem(1),
+                new FixedPriceLineItem(2),
+                new ByWeightLineItem(1, 1),
+                new ByWeightLineItem(2, 1)
+            };
+            const int expectedCount = 4;
+            const decimal expectedPrice = 45.00m;
+            
+            // Act
+            shoppingCart.Add(lineItems);
+            int actualCount = shoppingCart.Count;
+            decimal actualPrice = shoppingCart.GetPrice();
+            
+            // Assert
+            Assert.That(actualCount, Is.EqualTo(expectedCount));
+            Assert.That(actualPrice, Is.EqualTo(expectedPrice));
+        }
+
         //--------------------------------------------------------------------------------------
         
         [Test]
@@ -105,9 +180,10 @@ namespace GlobalRelay.Problem.Tests
             // Assert
             Assert.Throws<ArgumentNullException>(() =>
                 {
+                    // ReSharper disable once UnusedVariable
                     ShoppingCartWithCouponDiscount shoppingCartWithCouponDiscount = new ShoppingCartWithCouponDiscount(null)
                     {
-                        CouponDiscount = 10.00
+                        CouponDiscount = 10.00m
                     };
                 }
             );
@@ -144,8 +220,35 @@ namespace GlobalRelay.Problem.Tests
         }
         
         //--------------------------------------------------------------------------------------
-
-        
+                
+        [Test]
+        public void ShoppingCartWithCouponDiscountWithMultipleLineItemsHasCorrectPriceTest()
+        {
+            // Arrange
+            IShoppingCart shoppingCart = new ShoppingCart();
+            IEnumerable<ILineItem> lineItems = new List<ILineItem>
+            {
+                new FixedPriceLineItem(1),
+                new FixedPriceLineItem(2),
+                new ByWeightLineItem(1, 1),
+                new ByWeightLineItem(2, 1)
+            };
+            shoppingCart.Add(lineItems);
+            IShoppingCart shoppingCartWithCouponDiscount = new ShoppingCartWithCouponDiscount(shoppingCart)
+            {
+                CouponDiscount = 10.00m
+            };
+            const int expectedCount = 4;
+            const decimal expectedPrice = 35.00m;
+            
+            // Act
+            decimal actualPrice = shoppingCartWithCouponDiscount.GetPrice();
+            int actualCount = shoppingCart.Count;
+            
+            // Assert
+            Assert.That(actualCount, Is.EqualTo(expectedCount));
+            Assert.That(actualPrice, Is.EqualTo(expectedPrice));
+        }
     }
 }
 

@@ -47,7 +47,6 @@ namespace GlobalRelay.Problem.Domain
             return Quantity * UnitPrice;
         }
 
-        // todo return multiple values to eliminate extra type
         private static FixedPriceLineItemData LookupLineItemData(int id)
         {
             ILookupLineItemData<FixedPriceLineItemData> fixedPriceLineItemLookup = new FixedPriceLineItemLookup();

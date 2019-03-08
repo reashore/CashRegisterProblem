@@ -6,9 +6,8 @@ namespace GlobalRelay.Problem.Domain
     public interface IShoppingCart
     {
         void Add(ILineItem lineItem);
-        void Add(IEnumerable<LineItem> lineItems);
+        void Add(IEnumerable<ILineItem> lineItems);
         decimal GetPrice();
-        string ToString();
         int Count { get; }
     }
     
@@ -28,14 +27,14 @@ namespace GlobalRelay.Problem.Domain
             _lineItemList.Add(lineItem);
         }
         
-        public void Add(IEnumerable<LineItem> lineItems)
+        public void Add(IEnumerable<ILineItem> lineItems)
         {
             if (lineItems == null)
             {
                 throw new ArgumentNullException(nameof(lineItems));
             }
             
-            foreach (LineItem lineItem in lineItems)
+            foreach (ILineItem lineItem in lineItems)
             {
                 Add(lineItem);
             }
@@ -53,11 +52,6 @@ namespace GlobalRelay.Problem.Domain
             return totalPrice;
         }
 
-        public override string ToString()
-        {
-            return "List of cart items with prices and total cost of cart";
-        }
-
         public int Count => _lineItemList.Count;
     }
     
@@ -66,9 +60,8 @@ namespace GlobalRelay.Problem.Domain
     public abstract class ShoppingCartDecorator : IShoppingCart
     {
         public abstract void Add(ILineItem lineItem);
-        public abstract void Add(IEnumerable<LineItem> lineItems);
+        public abstract void Add(IEnumerable<ILineItem> lineItems);
         public abstract decimal GetPrice();
-        public abstract override string ToString();
         public abstract int Count { get; }
     }
     
@@ -77,13 +70,28 @@ namespace GlobalRelay.Problem.Domain
     public class ShoppingCartWithCouponDiscount : ShoppingCartDecorator
     {
         private readonly IShoppingCart _shoppingCart;
+        private decimal _couponDiscount;
 
         public ShoppingCartWithCouponDiscount(IShoppingCart shoppingCart)
         {
             _shoppingCart = shoppingCart ?? throw new ArgumentNullException(nameof(shoppingCart));
         }
-        
-        public double CouponDiscount { get; set; }
+
+        public decimal CouponDiscount
+        {
+            private get => _couponDiscount;
+
+            set
+            {
+                if (value <= 0)
+                {
+                    const string message = "CouponDiscount cannot be <= 0";
+                    throw new Exception(message);
+                }
+
+                _couponDiscount = value;
+            }
+        }
         
         public override void Add(ILineItem lineItem)
         {
@@ -95,7 +103,7 @@ namespace GlobalRelay.Problem.Domain
             _shoppingCart.Add(lineItem);
         }
         
-        public override void Add(IEnumerable<LineItem> lineItems)
+        public override void Add(IEnumerable<ILineItem> lineItems)
         {
             if (lineItems == null)
             {
@@ -109,16 +117,13 @@ namespace GlobalRelay.Problem.Domain
         {
             decimal totalPrice = _shoppingCart.GetPrice();
 
-            // todo fix
-            totalPrice *= (decimal) CouponDiscount;
-
+            if (totalPrice >= CouponDiscount)
+            {
+                totalPrice = totalPrice - CouponDiscount;
+            }
+            
             return totalPrice;
         }
-
-        public override string ToString()
-        {
-            return "List of cart items with prices and total cost of cart";
-        } 
         
         public override int Count => _shoppingCart.Count;
     }

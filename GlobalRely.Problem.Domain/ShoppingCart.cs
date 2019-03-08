@@ -7,7 +7,6 @@ namespace GlobalRely.Problem.Domain
         void Add(ILineItem lineItem);
         void Add(IEnumerable<LineItem> lineItems);
         decimal GetPrice();
-        string ToString();
     }
 
     public class ShoppingCart : IShoppingCart
@@ -44,12 +43,6 @@ namespace GlobalRely.Problem.Domain
             return totalPrice;
         }
 
-        public override string ToString()
-        {
-            return "List of cart items with prices and total cost of cart";
-        }
-
-        // todo more work here?
         public int Count => _lineItemList.Count;
     }
 
@@ -58,7 +51,6 @@ namespace GlobalRely.Problem.Domain
         public abstract void Add(ILineItem lineItem);
         public abstract void Add(IEnumerable<LineItem> lineItems);
         public abstract decimal GetPrice();
-        public abstract override string ToString();
     }
 
     public class ShoppingCartWithCouponDiscount : ShoppingCartDecorator
@@ -85,16 +77,9 @@ namespace GlobalRely.Problem.Domain
         public override decimal GetPrice()
         {
             decimal totalPrice = _shoppingCart.GetPrice();
-            
-            // Apply discount
             totalPrice *= (decimal) CouponDiscount;
 
             return totalPrice;
         }
-
-        public override string ToString()
-        {
-            return "List of cart items with prices and total cost of cart";
-        } 
     }
 }

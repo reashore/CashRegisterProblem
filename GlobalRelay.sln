@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.438
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GlobalRelay.Problem", "GlobalRelay.Problem\GlobalRelay.Problem.csproj", "{EA3457F2-CBD3-4BA0-B25F-C71DC24AB2B1}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GlobalRelay.Problem.Tests", "GlobalRelay.Problem.Tests\GlobalRelay.Problem.Tests.csproj", "{B61A449D-BD31-42AA-8FA9-490DB0B85AC4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GlobalRelay.Problem.Domain", "GlobalRelay.Problem.Domain\GlobalRelay.Problem.Domain.csproj", "{64173B0B-0945-41C4-BE32-B0453C500B7D}"
@@ -15,10 +13,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{EA3457F2-CBD3-4BA0-B25F-C71DC24AB2B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EA3457F2-CBD3-4BA0-B25F-C71DC24AB2B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EA3457F2-CBD3-4BA0-B25F-C71DC24AB2B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EA3457F2-CBD3-4BA0-B25F-C71DC24AB2B1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B61A449D-BD31-42AA-8FA9-490DB0B85AC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B61A449D-BD31-42AA-8FA9-490DB0B85AC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B61A449D-BD31-42AA-8FA9-490DB0B85AC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
