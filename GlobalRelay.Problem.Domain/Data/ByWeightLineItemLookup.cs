@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace GlobalRelay.Problem.Domain
+namespace GlobalRelay.Problem.Domain.Data
 {
     public class ByWeightLineItemData
     {

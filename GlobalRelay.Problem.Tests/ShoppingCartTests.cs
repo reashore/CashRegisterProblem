@@ -8,11 +8,6 @@ namespace GlobalRelay.Problem.Tests
     [TestFixture]
     public class ShoppingCartTests
     {
-//        [SetUp]
-//        public void Setup()
-//        {
-//        }
-
         [Test]
         public void EmptyShoppingCartHasZeroCountTest()
         {
@@ -251,34 +246,3 @@ namespace GlobalRelay.Problem.Tests
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
