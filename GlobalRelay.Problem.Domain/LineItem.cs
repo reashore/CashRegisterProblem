@@ -16,17 +16,10 @@ namespace GlobalRelay.Problem.Domain
         public string Description { get; set; }
         public abstract decimal GetPrice();
     }
-
-    public abstract class LineItemDecorator : ILineItem
-    {
-        public int Id { get; set; }
-        public string Description { get; set; }
-        public abstract decimal GetPrice();
-    }
     
     //------------------------------------------------------
 
-    public class FixedPriceLineItem : ILineItem
+    public class FixedPriceLineItem : LineItem
     {
         public FixedPriceLineItem(int id, int quantity = 1)
         {
@@ -38,12 +31,10 @@ namespace GlobalRelay.Problem.Domain
             UnitPrice = fixedPriceLineItemData.Price;
         }
         
-        public int Id { get; set; }
-        public string Description { get; set; }
         private int Quantity { get; }
         private decimal UnitPrice { get; }
         
-        public decimal GetPrice()
+        public override decimal GetPrice()
         {
             return Quantity * UnitPrice;
         }
@@ -56,7 +47,7 @@ namespace GlobalRelay.Problem.Domain
         }
     }
 
-    public class ByWeightLineItem : ILineItem
+    public class ByWeightLineItem : LineItem
     {
         public ByWeightLineItem(int id, double weightInKilos)
         {
@@ -68,12 +59,10 @@ namespace GlobalRelay.Problem.Domain
             PricePerKilo = byWeightLineItemData.PricePerKilo;
         }
         
-        public int Id { get; set; }
-        public string Description { get; set; }
         private double WeightInKilos { get; }
         private decimal PricePerKilo { get; }
 
-        public decimal GetPrice()
+        public override decimal GetPrice()
         {
             return (decimal) WeightInKilos * PricePerKilo;
         }
@@ -85,18 +74,28 @@ namespace GlobalRelay.Problem.Domain
             return byWeightLineItemData;
         }
     }
-    
+
+    //------------------------------------------------------
+
+    public abstract class LineItemDecorator : LineItem
+    {
+        protected ILineItem UndecoratedLineItem;
+
+        protected LineItemDecorator(ILineItem lineItem)
+        {
+            UndecoratedLineItem = lineItem ?? throw new ArgumentNullException(nameof(lineItem));
+        }
+    }
+
     //------------------------------------------------------
 
     public class BulkDiscountLineItem : LineItemDecorator
     {
-        private readonly ILineItem _lineItem;
         private decimal _discountThreshold;
         private double _discountPercentage;
 
-        public BulkDiscountLineItem(ILineItem lineItem)
+        public BulkDiscountLineItem(ILineItem lineItem) : base(lineItem)
         {
-            _lineItem = lineItem ?? throw new ArgumentNullException(nameof(lineItem));
         }
 
         public decimal DiscountThreshold
@@ -133,7 +132,7 @@ namespace GlobalRelay.Problem.Domain
         
         public override decimal GetPrice()
         {
-            decimal price = _lineItem.GetPrice();
+            decimal price = UndecoratedLineItem.GetPrice();
 
             if (price >= DiscountThreshold)
             {
@@ -146,12 +145,10 @@ namespace GlobalRelay.Problem.Domain
 
     public class CouponDiscountLineItem : LineItemDecorator
     {
-        private readonly ILineItem _lineItem;
         private decimal _couponDiscount;
 
-        public CouponDiscountLineItem(ILineItem lineItem)
+        public CouponDiscountLineItem(ILineItem lineItem) : base(lineItem)
         {
-            _lineItem = lineItem ?? throw new ArgumentNullException(nameof(lineItem));
         }
 
         public decimal CouponDiscount
@@ -172,7 +169,7 @@ namespace GlobalRelay.Problem.Domain
         
         public override decimal GetPrice()
         {
-            decimal price = _lineItem.GetPrice();
+            decimal price = UndecoratedLineItem.GetPrice();
 
             if (price >= CouponDiscount)
             {

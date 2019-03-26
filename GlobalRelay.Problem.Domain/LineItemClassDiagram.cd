@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="GlobalRelay.Problem.Domain.BulkDiscountLineItem" Collapsed="true">
+    <Position X="5.75" Y="4.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIAAAAAAEAAAAQAAAAAAAAAAAACAAAACAAA=</HashCode>
+      <FileName>LineItem.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GlobalRelay.Problem.Domain.ByWeightLineItem" Collapsed="true">
+    <Position X="0.5" Y="3" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>ACAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAQAEAAA=</HashCode>
+      <FileName>LineItem.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GlobalRelay.Problem.Domain.CouponDiscountLineItem" Collapsed="true">
+    <Position X="3.25" Y="4.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAEEAAAAAAAEAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>LineItem.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GlobalRelay.Problem.Domain.FixedPriceLineItem" Collapsed="true">
+    <Position X="2.5" Y="3" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>ICAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAgAAAAAA=</HashCode>
+      <FileName>LineItem.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GlobalRelay.Problem.Domain.LineItem" Collapsed="true">
+    <Position X="2.5" Y="2" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAgAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>LineItem.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="GlobalRelay.Problem.Domain.LineItemDecorator" Collapsed="true">
+    <Position X="4.5" Y="3" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>LineItem.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="GlobalRelay.Problem.Domain.ILineItem" Collapsed="true">
+    <Position X="2.5" Y="0.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAgAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>LineItem.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

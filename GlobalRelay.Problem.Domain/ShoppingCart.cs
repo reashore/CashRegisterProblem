@@ -8,16 +8,22 @@ namespace GlobalRelay.Problem.Domain
         void Add(ILineItem lineItem);
         void Add(IEnumerable<ILineItem> lineItems);
         decimal GetPrice();
-        int Count { get; }
+    }
+
+    public abstract class ShoppingCartBase : IShoppingCart
+    {
+        public abstract void Add(ILineItem lineItem);
+        public abstract void Add(IEnumerable<ILineItem> lineItems);
+        public abstract decimal GetPrice();
     }
     
     //--------------------------------------------------------------------------------------
 
-    public class ShoppingCart : IShoppingCart
+    public class ShoppingCart : ShoppingCartBase
     {
         private readonly List<ILineItem> _lineItemList = new List<ILineItem>();
         
-        public void Add(ILineItem lineItem)
+        public override void Add(ILineItem lineItem)
         {
             if (lineItem == null)
             {
@@ -27,7 +33,7 @@ namespace GlobalRelay.Problem.Domain
             _lineItemList.Add(lineItem);
         }
         
-        public void Add(IEnumerable<ILineItem> lineItems)
+        public override void Add(IEnumerable<ILineItem> lineItems)
         {
             if (lineItems == null)
             {
@@ -40,7 +46,7 @@ namespace GlobalRelay.Problem.Domain
             }
         }
 
-        public decimal GetPrice()
+        public override decimal GetPrice()
         {
             decimal totalPrice = 0m;
 
@@ -51,30 +57,28 @@ namespace GlobalRelay.Problem.Domain
 
             return totalPrice;
         }
-
-        public int Count => _lineItemList.Count;
     }
     
     //--------------------------------------------------------------------------------------
 
-    public abstract class ShoppingCartDecorator : IShoppingCart
+    public abstract class ShoppingCartDecorator : ShoppingCart
     {
-        public abstract void Add(ILineItem lineItem);
-        public abstract void Add(IEnumerable<ILineItem> lineItems);
-        public abstract decimal GetPrice();
-        public abstract int Count { get; }
+        protected IShoppingCart UndecoratedShoppingCart;
+
+        protected ShoppingCartDecorator(IShoppingCart shoppingCart)
+        {
+            UndecoratedShoppingCart = shoppingCart ?? throw new ArgumentNullException(nameof(shoppingCart));
+        }
     }
     
     //--------------------------------------------------------------------------------------
 
     public class ShoppingCartWithCouponDiscount : ShoppingCartDecorator
     {
-        private readonly IShoppingCart _shoppingCart;
         private decimal _couponDiscount;
 
-        public ShoppingCartWithCouponDiscount(IShoppingCart shoppingCart)
+        public ShoppingCartWithCouponDiscount(IShoppingCart shoppingCart) :base(shoppingCart)
         {
-            _shoppingCart = shoppingCart ?? throw new ArgumentNullException(nameof(shoppingCart));
         }
 
         public decimal CouponDiscount
@@ -100,7 +104,7 @@ namespace GlobalRelay.Problem.Domain
                 throw new ArgumentNullException(nameof(lineItem));
             }
 
-            _shoppingCart.Add(lineItem);
+            UndecoratedShoppingCart.Add(lineItem);
         }
         
         public override void Add(IEnumerable<ILineItem> lineItems)
@@ -110,12 +114,12 @@ namespace GlobalRelay.Problem.Domain
                 throw new ArgumentNullException(nameof(lineItems));
             }
 
-            _shoppingCart.Add(lineItems);
+            UndecoratedShoppingCart.Add(lineItems);
         }
 
         public override decimal GetPrice()
         {
-            decimal totalPrice = _shoppingCart.GetPrice();
+            decimal totalPrice = UndecoratedShoppingCart.GetPrice();
 
             if (totalPrice >= CouponDiscount)
             {
@@ -124,7 +128,5 @@ namespace GlobalRelay.Problem.Domain
             
             return totalPrice;
         }
-        
-        public override int Count => _shoppingCart.Count;
     }
 }
