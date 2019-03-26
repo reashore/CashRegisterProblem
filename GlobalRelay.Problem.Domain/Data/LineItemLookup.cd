@@ -1,40 +1,40 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
-  <Class Name="GlobalRelay.Problem.Domain.ByWeightLineItemData" Collapsed="true">
-    <Position X="1.25" Y="3.5" Width="2" />
+  <Class Name="GlobalRelay.Problem.Domain.Data.ByWeightLineItemData">
+    <Position X="0.75" Y="4.75" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAA=</HashCode>
-      <FileName>ByWeightLineItemLookup.cs</FileName>
+      <FileName>Data\ByWeightLineItemLookup.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="GlobalRelay.Problem.Domain.ByWeightLineItemLookup" Collapsed="true">
-    <Position X="4.75" Y="2.5" Width="2.25" />
+  <Class Name="GlobalRelay.Problem.Domain.Data.ByWeightLineItemLookup">
+    <Position X="0.75" Y="2" Width="2" />
     <TypeIdentifier>
       <HashCode>ACAABAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>ByWeightLineItemLookup.cs</FileName>
+      <FileName>Data\ByWeightLineItemLookup.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="GlobalRelay.Problem.Domain.FixedPriceLineItemData" Collapsed="true">
-    <Position X="4.75" Y="3.5" Width="2.25" />
+  <Class Name="GlobalRelay.Problem.Domain.Data.FixedPriceLineItemData">
+    <Position X="4.25" Y="4.75" Width="2.25" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAQAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>FixedPriceLineItemLookup.cs</FileName>
+      <FileName>Data\FixedPriceLineItemLookup.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="GlobalRelay.Problem.Domain.FixedPriceLineItemLookup" Collapsed="true">
-    <Position X="1.25" Y="2.5" Width="2" />
+  <Class Name="GlobalRelay.Problem.Domain.Data.FixedPriceLineItemLookup">
+    <Position X="4.25" Y="2" Width="2.25" />
     <TypeIdentifier>
       <HashCode>ACAABAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>FixedPriceLineItemLookup.cs</FileName>
+      <FileName>Data\FixedPriceLineItemLookup.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Interface Name="GlobalRelay.Problem.Domain.ILookupLineItemData&lt;T&gt;" Collapsed="true">
-    <Position X="2" Y="1.25" Width="2.5" />
+  <Interface Name="GlobalRelay.Problem.Domain.Data.ILookupLineItemData&lt;T&gt;">
+    <Position X="2.5" Y="0.5" Width="2.25" />
     <TypeIdentifier>
       <HashCode>ACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>ByWeightLineItemLookup.cs</FileName>
+      <FileName>Data\ByWeightLineItemLookup.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Font Name="Segoe UI" Size="9" />
