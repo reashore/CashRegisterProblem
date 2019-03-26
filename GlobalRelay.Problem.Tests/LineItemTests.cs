@@ -1,6 +1,7 @@
 using System;
 using GlobalRelay.Problem.Domain;
 using GlobalRelay.Problem.Domain.Data;
+using GlobalRelay.Problem.Domain.LineItems;
 using NUnit.Framework;
 
 namespace GlobalRelay.Problem.Tests

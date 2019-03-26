@@ -1,7 +1,7 @@
 ﻿using System;
 using GlobalRelay.Problem.Domain.Data;
 
-namespace GlobalRelay.Problem.Domain
+namespace GlobalRelay.Problem.Domain.LineItems
 {
     public interface ILineItem
     {

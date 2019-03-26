@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
+using GlobalRelay.Problem.Domain.LineItems;
 
-namespace GlobalRelay.Problem.Domain
+namespace GlobalRelay.Problem.Domain.ShoppingCart
 {
     public interface IShoppingCart
     {

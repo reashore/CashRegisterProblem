@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 using GlobalRelay.Problem.Domain;
+using GlobalRelay.Problem.Domain.LineItems;
+using GlobalRelay.Problem.Domain.ShoppingCart;
 
 namespace GlobalRelay.Problem.Tests
 {
