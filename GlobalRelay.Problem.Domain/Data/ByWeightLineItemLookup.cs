@@ -2,23 +2,6 @@ using System.Collections.Generic;
 
 namespace GlobalRelay.Problem.Domain.Data
 {
-    public class ByWeightLineItemData
-    {
-        public ByWeightLineItemData(string description, decimal pricePerKilo)
-        {
-            Description = description;
-            PricePerKilo = pricePerKilo;
-        }
-
-        public string Description { get; }
-        public decimal PricePerKilo { get; }
-    }
-
-    public interface ILookupLineItemData<out T> where T: class
-    {
-        T LookupLineItemData(int id);
-    }
-
     public class ByWeightLineItemLookup : ILookupLineItemData<ByWeightLineItemData>
     {
         private readonly Dictionary<int, ByWeightLineItemData> _lineItemDataDictionary = new Dictionary<int, ByWeightLineItemData>();
